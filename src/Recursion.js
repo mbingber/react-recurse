@@ -29,11 +29,14 @@ export default class Recursion extends Component {
   get styles() {
     const { index, sideLength } = this.props;
 
+    const percent = Math.round((index / MAX_AMOUNT) * 100);
+
     return {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      border: '2px solid black',
+      // border: '2px solid black',
+      backgroundColor: `hsl(0, 0%, ${percent}%)`,
       height: `${sideLength}px`,
       width: `${sideLength}px`,
       transform: `rotate(${this.rotationAngle * 180 / Math.PI}deg)`,
