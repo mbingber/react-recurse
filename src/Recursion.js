@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 
 import Delay from './Delay';
 
-const MAX_AMOUNT = 50;
-const SCALE = 0.1;
-
 export default class Recursion extends Component {
   static propTypes = {
+    numSquares: PropTypes.number,
     index: PropTypes.number,
     sideLength: PropTypes.number,
   };
@@ -18,44 +16,47 @@ export default class Recursion extends Component {
   };
 
   get nextSideLength() {
-    const ratio = Math.sqrt(2) / 2 * Math.sqrt(SCALE**2 - 2*SCALE + 2);
+    const { scale } = this.props;
+    const ratio = Math.sqrt(2) / 2 * Math.sqrt(scale**2 - 2*scale + 2);
     return ratio * this.props.sideLength;
   }
 
   get rotationAngle() {
-    return this.props.index > 0 ? Math.PI/4 - Math.atan(1 - SCALE) : 0;
+    const { index, scale } = this.props;
+    return index > 0 ? Math.PI/4 - Math.atan(1 - scale) : 0;
   }
 
   get styles() {
-    const { index, sideLength } = this.props;
+    const { index, sideLength, numSquares } = this.props;
 
-    const percent = Math.round((index / MAX_AMOUNT) * 100);
+    const percent = Math.round((index / numSquares) * 100);
+    const dim = `${Math.round(sideLength)}px`;
+    const transform = `rotate(${this.rotationAngle * 180 / Math.PI}deg)`;
 
     return {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      // border: '2px solid black',
       backgroundColor: `hsl(0, 0%, ${percent}%)`,
-      height: `${sideLength}px`,
-      width: `${sideLength}px`,
-      transform: `rotate(${this.rotationAngle * 180 / Math.PI}deg)`,
+      height: dim,
+      width: dim,
+      transform,
     };
   }
 
   render = () => {
-    const { index } = this.props;
+    const { index, numSquares, ...rest } = this.props;
 
-    if (index > MAX_AMOUNT) return null;
+    if (index > numSquares) return null;
 
     return (
       <div style={this.styles}>
-        <Delay time={50}>
-          <Recursion
-            index={index+1}
-            sideLength={this.nextSideLength}
-          />
-        </Delay>
+        <Recursion
+          {...rest}
+          index={index+1}
+          sideLength={this.nextSideLength}
+          numSquares={numSquares}
+        />
       </div>
     );
   }
