@@ -5,6 +5,9 @@ const styles = {
   container: {
     padding: '50px',
     width: '100%',
+  },
+  separator: {
+    paddingBottom: '30px',
   }
 }
 
@@ -23,6 +26,7 @@ const Controls = ({
         value={numSquares}
         onChange={changeNumSquares}
       />
+      <div style={styles.separator} />
       <Slider
         label="Degree of change"
         min={1}
